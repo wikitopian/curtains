@@ -15,17 +15,23 @@ class Curtains {
 	public function __construct() {
 		$this->prefix = 'curtains';
 
-		add_action( 'init', array( &$this, 'register_style' ) );
 		add_action( 'wp_enqueue_scripts', array( &$this, 'do_style' ) );
+		add_action( 'wp_enqueue_scripts', array( &$this, 'do_script' ) );
 	}
-	public function register_style() {
-		wp_register_style(
+	public function do_style() {
+		wp_enqueue_style(
 			$this->prefix,
 			plugins_url( 'css/curtains.css', __FILE__ )
 		);
 	}
-	public function do_style() {
-		wp_enqueue_style( $this->prefix );
+	public function do_script() {
+		wp_enqueue_script(
+			$this->prefix,
+			plugins_url( 'js/curtains.js', __FILE__ ),
+			'jquery',
+			false,
+			true
+		);
 	}
 }
 $curtains = new Curtains();
