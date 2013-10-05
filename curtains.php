@@ -33,6 +33,9 @@ class Curtains {
 			true
 		);
 	}
+	public function do_curtains() {
+		include_once 'inc/curtains-template.php';
+	}
 }
 $curtains = new Curtains();
 
