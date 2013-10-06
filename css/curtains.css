@@ -2,6 +2,8 @@
 img.curtain{
     height:300px; /* so jQuery doesn't keep ascpect ration when animating the width '*/
     z-index:99; /* to show it on top of the content*/
+    margin: 0px !important;
+    border: 0px !important;
 }
 
 /*LEFT CURTAIN IMAGE CLASS*/
@@ -24,7 +26,8 @@ img.curtainRight{
     overflow:hidden; /*hide everything out of boundaries (in this case for the description div)*/
     color:white; /* just styling*/
     background:black; /* just styling*/
-
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /*THE TEXT DIV CLASS (BEHIND THE CURTAINS)*/
