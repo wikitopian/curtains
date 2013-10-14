@@ -31,7 +31,7 @@ img.curtainRight{
 }
 
 /*THE TEXT DIV CLASS (BEHIND THE CURTAINS)*/
-.content{
+.curtain_content{
     position:relative; /*so we can center it*/
     width: 300px; /*curtain_wrapper width - shrinked image width (50px is image when shrinked)*/
     margin:0px auto; /*center it*/
@@ -39,7 +39,7 @@ img.curtainRight{
 }
 
 /*DESCRIPTION DIV CLASS (THE TEXT ON TOP LEFT SIDE IN THE DEMO)*/
-.description{
+.curtain_description{
     position:absolute; /*absolute position is important*/
     top:0px; /*position it on top of the curtain_wrapper*/
     z-index:100; /*show it on top of the curtain (remember that they have z-index of 99)*/
