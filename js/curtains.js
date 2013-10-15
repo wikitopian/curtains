@@ -4,9 +4,9 @@ jQuery(document).ready(function( $ ){
     $('.curtain_wrapper').click(function(){
         // animate the description div by changing it's left position to it's width (but as negative number)...
         $(this).children('.curtain_description').animate({'left': -1*$(this).width()});
-        $(this).children('.curtain_description').hide();
+        $(this).children('.curtain_description').fadeOut(2000);
 
-        // animate the 2 curtain images to width of 50px with duration of 2 seconds...
+        // animate the 2 curtain images to width of 0px with duration of 2 seconds...
         $(this).children('img.curtain').animate({ width: 0 },{duration: 2000});
 
         // show the content behind the curtains with fadeIn function (2 seconds)
