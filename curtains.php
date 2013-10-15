@@ -68,11 +68,14 @@ class Curtains {
 	}
 	public function do_dimensions( $width, $height ) {
 
+		$width_half = intval( $width / 2.0 );
+
 		$css = <<<CSS
 
 <style>
 
 img.curtain {
+    width:  {$width_half}px;
     height: {$height}px;
 }
 
