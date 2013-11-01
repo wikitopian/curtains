@@ -49,7 +49,7 @@ class Curtains {
 		);
 	}
 	public function do_shortcode( $atts, $content = '' ) {
-		do_shortcode( $content ); // recursion
+		$content = do_shortcode( $content ); // recursion
 
 		extract(
 			shortcode_atts(
