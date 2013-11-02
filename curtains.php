@@ -1,12 +1,12 @@
 <?php
 /*
-Plugin Name: Curtains
-Plugin URI: http://www.github.com/wikitopian/curtains
-Description: Curtains Opening Animation with jQuery
-Version: 0.1.0
-Author: @wikitopian
-Author URI: http://www.github.com/wikitopian
-License: GPLv2
+ * Plugin Name: Curtains
+ * Plugin URI:  http://www.github.com/wikitopian/curtains
+ * Description: Curtains Opening Animation with jQuery
+ * Version:     0.1.0
+ * Author:      @wikitopian
+ * Author URI:  http://www.github.com/wikitopian
+ * License:     GPLv2
  */
 
 class Curtains {
@@ -26,8 +26,12 @@ class Curtains {
 	public function set_options() {
 		$defaults = array(
 			'description' => '',
-			'width'       => 400,
-			'height'      => 300,
+			'count'       => 3,
+			'width'       => 200,
+			'height'      => 200,
+			'post_type'   => 'post',
+			'taxonomy'    => 'category',
+			'category'    => 0,
 			'image-left'  => plugins_url( 'images/curtain-left.jpg', __FILE__ ),
 			'image-right' => plugins_url( 'images/curtain-right.jpg', __FILE__ ),
 		);
@@ -55,44 +59,31 @@ class Curtains {
 			shortcode_atts(
 				array(
 					'description' => $this->options['description'],
+					'count'       => $this->options['count'],
 					'width'       => $this->options['width'],
 					'height'      => $this->options['height'],
+					'post_type'   => $this->options['post_type'],
+					'taxonomy'    => $this->options['taxonomy'],
+					'category'    => $this->options['category'],
 				),
 				$atts
 			)
 		);
 
-		$this->do_dimensions( $width, $height );
+		$this->do_dimensions( $count, $width, $height );
 
 		return $this->do_curtains( $description, $content );
 	}
-	public function do_dimensions( $width, $height ) {
-
-		$width_half = intval( $width / 2.0 );
-
-		$css = <<<CSS
-
-<style>
-
-img.curtain {
-    width:  {$width_half}px;
-    height: {$height}px;
-}
-
-.curtain_wrapper {
-	width:  {$width}px;
-	height: {$height}px;
-}
-
-.curtain_content {
-	width: {$width}px;
-}
-
-</style>
-
-CSS;
-
-		echo $css;
+	public function do_dimensions( $count, $width, $height ) {
+		wp_localize_script(
+			$this->prefix,
+			$this->prefix,
+			array(
+				'image_width' => $width,
+				'width'       => $width * $count,
+				'height'      => $height,
+			)
+		);
 
 	}
 	public function do_curtains( $description, $content ) {
@@ -105,24 +96,24 @@ CSS;
 <!--START THE WRAPPER-->
 <div class='curtain_wrapper'>
 
-	<!-- 2 CURTAIN IMAGES START HERE  -->
-	<img class='curtain curtainLeft'   src='{$image_left}' />
-	<img class='curtain curtainRight'  src='{$image_right}' />
-    <!-- END IMAGES -->
+<!-- 2 CURTAIN IMAGES START HERE  -->
+<img class='curtain curtainLeft'   src='{$image_left}' />
+<img class='curtain curtainRight'  src='{$image_right}' />
+<!-- END IMAGES -->
 
-    <!-- START THE CONTENT DIV -->
-	<div class='curtain_content'>
-		<!-- YOUR CONTENT HERE -->
-		{$content}
-	<!-- END YOUR CONTENT -->
-    </div>
-    <!-- END THE CONTENT DIV -->
+<!-- START THE CONTENT DIV -->
+<div class='curtain_content'>
+<!-- YOUR CONTENT HERE -->
+{$content}
+<!-- END YOUR CONTENT -->
+</div>
+<!-- END THE CONTENT DIV -->
 
-    <!-- START DESCRIPTION DIV, WHICH WILL BE SHOWN ON TOP OF THE CURTAIN AND REMOVED WHEN THE CURTAINS OPEN -->
-    <div class='curtain_description'>
-		{$description}
-    </div>
-    <!-- END DESCRIPTION DIV -->
+<!-- START DESCRIPTION DIV, WHICH WILL BE SHOWN ON TOP OF THE CURTAIN AND REMOVED WHEN THE CURTAINS OPEN -->
+<div class='curtain_description'>
+{$description}
+</div>
+<!-- END DESCRIPTION DIV -->
 
 </div>
 <!--END THE WRAPPER-->
