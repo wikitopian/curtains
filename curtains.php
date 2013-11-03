@@ -118,9 +118,12 @@ class Curtains {
 			array(
 				'numberposts' => $count,
 				'post_type'   => $post_type,
-				'taxonomy'    => $taxonomy,
-				'category'    => $category,
 				'meta_key'    => '_thumbnail_id', // thumbnail required
+				'tax_query'   => array(
+					'taxonomy' => $taxonomy,
+					'field'    => 'slug',
+					'terms'    => $category,
+				),
 			)
 		);
 
