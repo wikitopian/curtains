@@ -9,6 +9,8 @@
  * License:     GPLv2
  */
 
+require_once 'Wordpress-Timthumb-alternative/resize.php';
+
 class Curtains {
 	private $prefix;
 	private $options;
@@ -52,8 +54,7 @@ class Curtains {
 			true
 		);
 	}
-	public function do_shortcode( $atts, $content = '' ) {
-		$content = do_shortcode( $content ); // recursion
+	public function do_shortcode( $atts ) {
 
 		extract(
 			shortcode_atts(
@@ -72,7 +73,26 @@ class Curtains {
 
 		$this->do_dimensions( $count, $width, $height );
 
-		return $this->do_curtains( $description, $content );
+		$items = $this->get_items(
+			$post_type,
+			$taxonomy,
+			$category,
+			$count,
+			$width,
+			$height
+		);
+
+		$content = '';
+		foreach( $items as $url => $image ) {
+			$content .= "<a href=\"{$url}\">\n";
+			$content .= "<img src=\"{$image['url']}\" ";
+			$content .= "alt=\"{$image['title']}\" ";
+			$content .= "title=\"{$image['title']}\" ";
+			$content .= "width=\"{$image['width']}\" height=\"{$image['height']}\" />\n";
+			$content .= "</a>\n";
+		}
+
+		return $this->do_curtains( $items, $description, $content );
 	}
 	public function do_dimensions( $count, $width, $height ) {
 		wp_localize_script(
@@ -82,11 +102,40 @@ class Curtains {
 				'image_width' => $width,
 				'width'       => $width * $count,
 				'height'      => $height,
+				'count'       => $count,
+			)
+		);
+	}
+	public function get_items(
+		$post_type,
+		$taxonomy,
+		$category,
+		$count,
+		$width,
+		$height
+	) {
+		$items_posts = get_posts(
+			array(
+				'numberposts' => $count,
+				'post_type'   => $post_type,
+				'taxonomy'    => $taxonomy,
+				'category'    => $category,
+				'meta_key'    => '_thumbnail_id', // thumbnail required
 			)
 		);
 
+		$items = array();
+		foreach( $items_posts as $items_post_key => $item_post ) {
+			$permalink = get_permalink( $item_post->ID );
+			$thumbnail = wp_get_attachment_image_src( $item_post->_thumbnail_id, 'full' );
+			$thumbnail = matthewruddy_image_resize( $thumbnail[0], $width, $height );
+			$thumbnail['title'] = $item_post->post_title;
+			$items[$permalink] = $thumbnail;
+		}
+
+		return $items;
 	}
-	public function do_curtains( $description, $content ) {
+	public function do_curtains( $items, $description, $content ) {
 
 		$image_left  = $this->options['image-left'];
 		$image_right = $this->options['image-right'];

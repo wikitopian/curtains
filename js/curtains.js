@@ -9,6 +9,8 @@ jQuery(document).ready(function( $ ){
 	$('div.curtain_wrapper').css('height', curtains.height);
 	$('div.curtain_wrapper').css('visibility', 'visible');
 
+	$('div.curtain_content > a > img').css('width', Math.floor(100 / curtains.count) + '%');
+
 	// when user clicks inside the container...
 	$('.curtain_wrapper').click(function(){
 		// animate the description div by changing it's left position to it's width (but as negative number)...

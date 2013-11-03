@@ -1,0 +1,3 @@
+[submodule "Wordpress-Timthumb-alternative"]
+	path = Wordpress-Timthumb-alternative
+	url = git@github.com:MatthewRuddy/Wordpress-Timthumb-alternative.git
