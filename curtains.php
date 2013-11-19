@@ -114,27 +114,32 @@ class Curtains {
 		$width,
 		$height
 	) {
-		$items_posts = get_posts(
+
+		$items_posts = new WP_Query(
 			array(
-				'numberposts' => $count,
-				'post_type'   => $post_type,
-				'meta_key'    => '_thumbnail_id', // thumbnail required
-				'tax_query'   => array(
-					'taxonomy' => $taxonomy,
-					'field'    => 'slug',
-					'terms'    => $category,
+				'posts_per_page' => $count,
+				'post_type'      => $post_type,
+				'meta_key'       => '_thumbnail_id', // thumbnail required
+				'tax_query'      => array(
+					array(
+						'taxonomy' => $taxonomy,
+						'field'    => 'slug',
+						'terms'    => $category,
+					),
 				),
 			)
 		);
 
 		$items = array();
-		foreach( $items_posts as $items_post_key => $item_post ) {
+		foreach( $items_posts->posts as $items_post_key => $item_post ) {
 			$permalink = get_permalink( $item_post->ID );
 			$thumbnail = wp_get_attachment_image_src( $item_post->_thumbnail_id, 'full' );
 			$thumbnail = matthewruddy_image_resize( $thumbnail[0], $width, $height );
 			$thumbnail['title'] = $item_post->post_title;
 			$items[$permalink] = $thumbnail;
 		}
+
+        wp_reset_postdata();
 
 		return $items;
 	}
